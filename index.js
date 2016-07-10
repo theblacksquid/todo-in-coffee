@@ -13,7 +13,8 @@
 
     Item.prototype.defaults = {
       title: "",
-      completed: false
+      completed: false,
+      cid: Item.cid
     };
 
     return Item;
@@ -34,7 +35,7 @@
   })(Backbone.Collection);
 
   template = function(input) {
-    return "<li>" + input + "</li>";
+    return "<li> " + input + " <button class='delete'>X</button> </li>";
   };
 
   window.ListView = (function(superClass) {
@@ -47,7 +48,8 @@
     ListView.prototype.el = $('body');
 
     ListView.prototype.events = {
-      "click button": "appendItem"
+      "click .add": "appendItem",
+      "click .delete": "removeItem"
     };
 
     ListView.prototype.initialize = function() {
@@ -57,7 +59,7 @@
 
     ListView.prototype.render = function() {
       $(this.el).html("<div id='app'></div>");
-      $("#app").append("<button>Add Item</button>");
+      $("#app").append("<button class='add'>Add Item</button>");
       $("#app").append("<input type='text' />");
       $('#app').append("<ul id='list'></ul>");
       return this;
@@ -72,6 +74,11 @@
       this.list.add(item);
       $("#list").append(template(input));
       return console.log(item.get('title'));
+    };
+
+    ListView.prototype.removeItem = function() {
+      this.list.remove(this.list.at(this.list.length - 1));
+      return console.log("Item Removed");
     };
 
     return ListView;
