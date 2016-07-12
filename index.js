@@ -14,7 +14,7 @@
     Item.prototype.defaults = {
       title: "",
       completed: false,
-      cid: Item.cid
+      id: null
     };
 
     return Item;
@@ -77,7 +77,7 @@
     };
 
     ListView.prototype.removeItem = function() {
-      this.list.remove(this.list.at(this.list.length - 1));
+      this.model.destroy();
       return console.log("Item Removed");
     };
 
