@@ -14,6 +14,16 @@ template = (input) ->
  </li>
  "
 
+class window.ItemView extends Backbone.View # WIP, do no use
+  tagName: 'li'
+  
+  initialize: ->
+    @item = new Item
+    @render()
+    
+  render: ->
+    
+
 class window.ListView extends Backbone.View
   el: $ 'body'
   
@@ -34,10 +44,10 @@ class window.ListView extends Backbone.View
   
   appendItem: ->
     console.log "button pressed"
-    item = new Item
+    item = new ItemView
     input = $('input').val()
     item.set("title",input)
-    @list.add item
+    @list.add item.model
     $("#list").append template(input)
     console.log item.get('title')
   

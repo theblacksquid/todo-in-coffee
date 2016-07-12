@@ -38,6 +38,26 @@
     return "<li> " + input + " <button class='delete'>X</button> </li>";
   };
 
+  window.ItemView = (function(superClass) {
+    extend(ItemView, superClass);
+
+    function ItemView() {
+      return ItemView.__super__.constructor.apply(this, arguments);
+    }
+
+    ItemView.prototype.tagName = 'li';
+
+    ItemView.prototype.initialize = function() {
+      this.item = new Item;
+      return this.render();
+    };
+
+    ItemView.prototype.render = function() {};
+
+    return ItemView;
+
+  })(Backbone.View);
+
   window.ListView = (function(superClass) {
     extend(ListView, superClass);
 
@@ -68,10 +88,10 @@
     ListView.prototype.appendItem = function() {
       var input, item;
       console.log("button pressed");
-      item = new Item;
+      item = new ItemView;
       input = $('input').val();
       item.set("title", input);
-      this.list.add(item);
+      this.list.add(item.model);
       $("#list").append(template(input));
       return console.log(item.get('title'));
     };
