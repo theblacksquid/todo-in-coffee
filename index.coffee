@@ -18,9 +18,6 @@ class window.ItemView extends Backbone.View # WIP, do no use
   
   initialize: ->
     @model = new Item
-    
-  events: 
-    "click .delete": "removeItem"
   
   render: ->
     input = @model.get 'title'
@@ -38,6 +35,7 @@ class window.ListView extends Backbone.View
   events: 
     "click .add": "appendItem"
     "keydown" : "keyPress"
+    "click .delete": "deleteItem"
   
   initialize: ->
     @list = new List

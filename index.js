@@ -49,10 +49,6 @@
       return this.model = new Item;
     };
 
-    ItemView.prototype.events = {
-      "click .delete": "removeItem"
-    };
-
     ItemView.prototype.render = function() {
       var input;
       input = this.model.get('title');
@@ -81,7 +77,8 @@
 
     ListView.prototype.events = {
       "click .add": "appendItem",
-      "keydown": "keyPress"
+      "keydown": "keyPress",
+      "click .delete": "deleteItem"
     };
 
     ListView.prototype.initialize = function() {
