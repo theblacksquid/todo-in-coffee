@@ -45,14 +45,26 @@
       return ItemView.__super__.constructor.apply(this, arguments);
     }
 
-    ItemView.prototype.tagName = 'li';
-
     ItemView.prototype.initialize = function() {
-      this.item = new Item;
-      return this.render();
+      return this.model = new Item;
     };
 
-    ItemView.prototype.render = function() {};
+    ItemView.prototype.events = {
+      "click .delete": "removeItem"
+    };
+
+    ItemView.prototype.render = function() {
+      var input;
+      input = this.model.get('title');
+      $(this.el).append(template(input));
+      return this;
+    };
+
+    ItemView.prototype.removeItem = function() {
+      this.model.destroy();
+      this.remove();
+      return console.log("item removed");
+    };
 
     return ItemView;
 
@@ -69,7 +81,7 @@
 
     ListView.prototype.events = {
       "click .add": "appendItem",
-      "click .delete": "removeItem"
+      "keydown": "keyPress"
     };
 
     ListView.prototype.initialize = function() {
@@ -79,8 +91,8 @@
 
     ListView.prototype.render = function() {
       $(this.el).html("<div id='app'></div>");
+      $("#app").append("<input type='text' /><br />");
       $("#app").append("<button class='add'>Add Item</button>");
-      $("#app").append("<input type='text' />");
       $('#app').append("<ul id='list'></ul>");
       return this;
     };
@@ -88,17 +100,21 @@
     ListView.prototype.appendItem = function() {
       var input, item;
       console.log("button pressed");
-      item = new ItemView;
       input = $('input').val();
-      item.set("title", input);
+      item = new ItemView({
+        el: "#list"
+      });
+      item.model.set({
+        title: input
+      });
       this.list.add(item.model);
-      $("#list").append(template(input));
-      return console.log(item.get('title'));
+      return item.render();
     };
 
-    ListView.prototype.removeItem = function() {
-      this.model.destroy();
-      return console.log("Item Removed");
+    ListView.prototype.keyPress = function(e) {
+      if (e.which === 13) {
+        return this.appendItem();
+      }
     };
 
     return ListView;

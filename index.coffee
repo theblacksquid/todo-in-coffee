@@ -15,21 +15,29 @@ template = (input) ->
  "
 
 class window.ItemView extends Backbone.View # WIP, do no use
-  tagName: 'li'
   
   initialize: ->
-    @item = new Item
-    @render()
+    @model = new Item
     
+  events: 
+    "click .delete": "removeItem"
+  
   render: ->
-    
+    input = @model.get 'title'
+    $(@el).append template(input)
+    @
+  
+  removeItem: ->
+    @model.destroy()
+    @.remove()
+    console.log "item removed"
 
 class window.ListView extends Backbone.View
   el: $ 'body'
   
   events: 
     "click .add": "appendItem"
-    "click .delete": "removeItem"
+    "keydown" : "keyPress"
   
   initialize: ->
     @list = new List
@@ -37,22 +45,21 @@ class window.ListView extends Backbone.View
   
   render: ->
     $(@el).html "<div id='app'></div>"
+    $("#app").append "<input type='text' /><br />"
     $("#app").append "<button class='add'>Add Item</button>"
-    $("#app").append "<input type='text' />"
     $('#app').append "<ul id='list'></ul>"
     @
   
   appendItem: ->
     console.log "button pressed"
-    item = new ItemView
     input = $('input').val()
-    item.set("title",input)
+    item = new ItemView({el: "#list"})
+    item.model.set({title: input})
     @list.add item.model
-    $("#list").append template(input)
-    console.log item.get('title')
+    item.render()
   
-  removeItem: -> #currently does not work. does't remove model
-    @model.destroy()
-    console.log "Item Removed"
+  keyPress: (e) ->
+    if e.which is 13   # 13 is the Enter key
+      @appendItem()
 
 list_view = new ListView
